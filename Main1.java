@@ -1,21 +1,26 @@
-import java.util.*;
-public class Main1 {
-	  public static void main(String[] args) {
-	    Scanner scn = new Scanner(System.in);
-	    int n = scn.nextInt();
-	    int summ=0,rem=0;
-	    while(n>0){
-	      int remm = n%10;
-	      if(rem%2!=0){
-	        summ = summ+remm;
-	      }
-	      n = n/10;
-	    }
-	    
-	    if(summ%2==0){
-	      System.out.println("Sum of odd digits is even");
-	    }else{
-	      System.out.println("Sum of odd digits is odd");
-	    }
+package practice;
+class One1 {
+int var1;
+One1(){
+	
+}
+One1(int x){
+	var1=x;
+}
+}
+class Derived1 extends One1{
+int var2;
+Derived1(){
+	
+}
+void display() {
+System.out.println("var1="+var1+"var2="+var2);
+}
+}
+class Main1 {
+	public static void main(String[] args) {
+		Derived1 obj=new Derived1();
+		obj.display();
 	}
+
 }
