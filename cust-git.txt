@@ -1,0 +1,1205 @@
+customer-add-form
+------------------------------------------
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false" %>
+ <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Customer</title>
+<style>
+.error
+{
+color:red;
+}
+body{
+ 
+  background: url(file:///C:/Users/Aspire/eclipse-workspace/CustomerManagementSystem/src/main/webapp/WEB-INF/img/cus4.jpg);
+background-repeat:no-repeat;
+background-position:fixed;
+background-size:cover;
+}
+a{
+text-decoration:none;
+color:burlywood;
+}
+input{
+box-sizing: border-box;
+border-radius:8px;
+}
+</style>
+</head>
+<body >
+<center>
+<h1>CUSTOMER MANAGEMENT SYSTEM</h1>
+</center>
+<h3>ADD CUSTOMER</h3>
+<form:form action="saveCustomer" modelAttribute="customer" method="POST" >
+		<table>
+			<tbody>
+			    <tr>
+					<td><label>Customer-ID:</label></td>
+					<td><form:input path="id" /></td>
+				</tr>
+				<tr>
+					<td><label>First Name:</label></td>
+					<td><form:input path="firstName" /></td>
+					<form:errors path="firstName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Last Name:</label></td>
+					<td><form:input path="lastName" /></td>
+					<form:errors path="lastName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Email-ID:</label></td>
+					<td><form:input path="email" /></td>
+					<form:errors path="email" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Contact number:</label></td>
+					<td><form:input path="contact" /></td>
+					<form:errors path="contact" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Gender:</label></td>
+					<td><form:input path="gender" /></td>
+					<form:errors path="gender" cssClass="error"/>
+				</tr>
+			<tr>
+					<td><label>Product:</label></td>
+					<td><form:input path="product" /></td>
+					<form:errors path="product" cssClass="error"/>
+				</tr>
+				
+				<tr>
+					<td><input type="submit" value="Save" class="save"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form:form>
+	<p>
+		<a href="http://localhost:8123/CustomerManagementSystem/customer/list">Back to Customer
+			List</a>
+	</p>
+</body>
+</html>
+
+
+
+customer-list.jsp
+---------------------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false" %>
+ <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Customer List</title>
+<style>
+body{
+ 
+  background: url(file:///C:/Users/Aspire/eclipse-workspace/CustomerManagementSystem/src/main/webapp/WEB-INF/img/cus.jpg);
+background-repeat:no-repeat;
+background-position:fixed;
+background-size:cover;
+}
+table{
+border-collapse:collapse;
+border:3px solid black;
+
+}
+input{
+backgroung-color:plum;
+box-sizing: border-box;
+border-radius:8px;
+}
+</style>
+</head>
+<body>
+<center>
+<h1>Customer Management System</h1>
+<center>
+<h3>CUSTOMER LIST</h3>
+
+
+<input type="button" value="BACK TO LOGIN" onclick="location.href='http://localhost:8123/CustomerManagementSystem/manager-login.jsp'" class="add-button"/>
+<input type="button" value="SIGN OUT" onclick="location.href='http://localhost:8123/CustomerManagementSystem/index.jsp'" class="add-button"/>
+<table border="1" bgclor="white" >
+	    <tr>
+		   <td>Customer_ID</td>
+		   <td>First Name</td>
+		   <td>Last Name</td>
+		   <td>Email_ID</td>
+		   <td>Contact number</td>
+		   <td>Gender</td>
+		   <td>Product</td>
+	       <td>Action</td>
+		</tr>
+		<c:forEach var="tempCustomers" items="${customers}">
+		<c:url var="updateLink" value="/customer/updateCustomer">
+				<c:param name="customerId" value="${tempCustomers.id}"></c:param>
+		</c:url>
+		<c:url var="deleteLink" value="/customer/deleteCustomer">
+				<c:param name="customerId" value="${tempCustomers.id}"></c:param>
+			</c:url>
+			<tr>
+				<td>${tempCustomers.id}</td>
+				<td>${tempCustomers.firstName}</td>
+				<td>${tempCustomers.lastName}</td>
+				<td>${tempCustomers.email}</td>
+				<td>${tempCustomers.contact}</td>
+				<td>${tempCustomers.gender}</td>
+				<td>${tempCustomers.product}</td>
+				<td><a href="${updateLink}">Update</a>|
+				<a href="${deleteLink}" onclick="if(!(confirm('Are you sure to delete'))) return false">Delete</a></td>
+			</tr>
+		</c:forEach>
+	</table>
+	<div>
+<input type="button" value="Add Customer" onclick="window.location.href='addCustomer';return false;" class="add-button"/>
+<br><br><br>
+</div>
+<br><br>
+<div class="search">
+<form action="searchCustomer"   >
+<label>Search By ID:</label>
+<input type="number" name="customerId">
+<input type="submit" value="Search" >
+</form>
+</div>
+</body>
+</html>
+
+
+
+customer-register.jsp
+-------------------------------------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false" %>
+ <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Customer</title>
+<style>
+.error
+{
+color:red;
+}
+body{
+ 
+  background: url(file:///C:/Users/Aspire/eclipse-workspace/CustomerManagementSystem/src/main/webapp/WEB-INF/img/cus4.jpg);
+background-repeat:no-repeat;
+background-position:fixed;
+background-size:cover;
+}
+a{
+text-decoration:none;
+color:burlywood;
+}
+input{
+box-sizing: border-box;
+border-radius:8px;
+}
+</style>
+</head>
+<body >
+<center>
+<h1>CUSTOMER MANAGEMENT SYSTEM</h1>
+</center>
+<h3>ADD CUSTOMER</h3>
+<form:form action="saCustomer" modelAttribute="customer" method="POST" >
+		<table>
+			<tbody>
+			    <tr>
+					<td><label>Customer-ID:</label></td>
+					<td><form:input path="id" /></td>
+				</tr>
+				<tr>
+					<td><label>First Name:</label></td>
+					<td><form:input path="firstName" /></td>
+					<form:errors path="firstName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Last Name:</label></td>
+					<td><form:input path="lastName" /></td>
+					<form:errors path="lastName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Email-ID:</label></td>
+					<td><form:input path="email" /></td>
+					<form:errors path="email" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Contact number:</label></td>
+					<td><form:input path="contact" /></td>
+					<form:errors path="contact" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Gender:</label></td>
+					<td><form:input path="gender" /></td>
+					<form:errors path="gender" cssClass="error"/>
+				</tr>
+			<tr>
+					<td><label>Product:</label></td>
+					<td><form:input path="product" /></td>
+					<form:errors path="product" cssClass="error"/>
+				</tr>
+				
+				<tr>
+					<td><input type="submit" value="Save" class="save"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form:form>
+	<p>
+		<a href="http://localhost:8123/CustomerManagementSystem/customer-login.jsp">Back
+			List</a>
+	</p>
+</body>
+</html><%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false" %>
+ <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Customer</title>
+<style>
+.error
+{
+color:red;
+}
+body{
+ 
+  background: url(file:///C:/Users/Aspire/eclipse-workspace/CustomerManagementSystem/src/main/webapp/WEB-INF/img/cus4.jpg);
+background-repeat:no-repeat;
+background-position:fixed;
+background-size:cover;
+}
+a{
+text-decoration:none;
+color:burlywood;
+}
+input{
+box-sizing: border-box;
+border-radius:8px;
+}
+</style>
+</head>
+<body >
+<center>
+<h1>CUSTOMER MANAGEMENT SYSTEM</h1>
+</center>
+<h3>ADD CUSTOMER</h3>
+<form:form action="saCustomer" modelAttribute="customer" method="POST" >
+		<table>
+			<tbody>
+			    <tr>
+					<td><label>Customer-ID:</label></td>
+					<td><form:input path="id" /></td>
+				</tr>
+				<tr>
+					<td><label>First Name:</label></td>
+					<td><form:input path="firstName" /></td>
+					<form:errors path="firstName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Last Name:</label></td>
+					<td><form:input path="lastName" /></td>
+					<form:errors path="lastName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Email-ID:</label></td>
+					<td><form:input path="email" /></td>
+					<form:errors path="email" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Contact number:</label></td>
+					<td><form:input path="contact" /></td>
+					<form:errors path="contact" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Gender:</label></td>
+					<td><form:input path="gender" /></td>
+					<form:errors path="gender" cssClass="error"/>
+				</tr>
+			<tr>
+					<td><label>Product:</label></td>
+					<td><form:input path="product" /></td>
+					<form:errors path="product" cssClass="error"/>
+				</tr>
+				
+				<tr>
+					<td><input type="submit" value="Save" class="save"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form:form>
+	<p>
+		<a href="http://localhost:8123/CustomerManagementSystem/customer-login.jsp">Back
+			List</a>
+	</p>
+</body>
+</html><%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false" %>
+ <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Customer</title>
+<style>
+.error
+{
+color:red;
+}
+body{
+ 
+  background: url(file:///C:/Users/Aspire/eclipse-workspace/CustomerManagementSystem/src/main/webapp/WEB-INF/img/cus4.jpg);
+background-repeat:no-repeat;
+background-position:fixed;
+background-size:cover;
+}
+a{
+text-decoration:none;
+color:burlywood;
+}
+input{
+box-sizing: border-box;
+border-radius:8px;
+}
+</style>
+</head>
+<body >
+<center>
+<h1>CUSTOMER MANAGEMENT SYSTEM</h1>
+</center>
+<h3>ADD CUSTOMER</h3>
+<form:form action="saCustomer" modelAttribute="customer" method="POST" >
+		<table>
+			<tbody>
+			    <tr>
+					<td><label>Customer-ID:</label></td>
+					<td><form:input path="id" /></td>
+				</tr>
+				<tr>
+					<td><label>First Name:</label></td>
+					<td><form:input path="firstName" /></td>
+					<form:errors path="firstName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Last Name:</label></td>
+					<td><form:input path="lastName" /></td>
+					<form:errors path="lastName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Email-ID:</label></td>
+					<td><form:input path="email" /></td>
+					<form:errors path="email" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Contact number:</label></td>
+					<td><form:input path="contact" /></td>
+					<form:errors path="contact" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Gender:</label></td>
+					<td><form:input path="gender" /></td>
+					<form:errors path="gender" cssClass="error"/>
+				</tr>
+			<tr>
+					<td><label>Product:</label></td>
+					<td><form:input path="product" /></td>
+					<form:errors path="product" cssClass="error"/>
+				</tr>
+				
+				<tr>
+					<td><input type="submit" value="Save" class="save"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form:form>
+	<p>
+		<a href="http://localhost:8123/CustomerManagementSystem/customer-login.jsp">Back
+			List</a>
+	</p>
+</body>
+</html>
+
+
+customer-search-form.jsp
+------------------------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false" %>
+ <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Customer</title>
+<style>
+.error
+{
+color:red;
+}
+body{
+ 
+  background: url(file:///C:/Users/Aspire/eclipse-workspace/CustomerManagementSystem/src/main/webapp/WEB-INF/img/cus4.jpg);
+background-repeat:no-repeat;
+background-position:fixed;
+background-size:cover;
+}
+a{
+text-decoration:none;
+color:burlywood;
+}
+input{
+box-sizing: border-box;
+border-radius:8px;
+}
+</style>
+</head>
+<body >
+<center>
+<h1>CUSTOMER MANAGEMENT SYSTEM</h1>
+</center>
+<h3>ADD CUSTOMER</h3>
+<form:form action="saCustomer" modelAttribute="customer" method="POST" >
+		<table>
+			<tbody>
+			    <tr>
+					<td><label>Customer-ID:</label></td>
+					<td><form:input path="id" /></td>
+				</tr>
+				<tr>
+					<td><label>First Name:</label></td>
+					<td><form:input path="firstName" /></td>
+					<form:errors path="firstName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Last Name:</label></td>
+					<td><form:input path="lastName" /></td>
+					<form:errors path="lastName" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Email-ID:</label></td>
+					<td><form:input path="email" /></td>
+					<form:errors path="email" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Contact number:</label></td>
+					<td><form:input path="contact" /></td>
+					<form:errors path="contact" cssClass="error"/>
+				</tr>
+				<tr>
+					<td><label>Gender:</label></td>
+					<td><form:input path="gender" /></td>
+					<form:errors path="gender" cssClass="error"/>
+				</tr>
+			<tr>
+					<td><label>Product:</label></td>
+					<td><form:input path="product" /></td>
+					<form:errors path="product" cssClass="error"/>
+				</tr>
+				
+				<tr>
+					<td><input type="submit" value="Save" class="save"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form:form>
+	<p>
+		<a href="http://localhost:8123/CustomerManagementSystem/customer-login.jsp">Back
+			List</a>
+	</p>
+</body>
+</html>
+
+
+
+customer-update-form.jsp
+------------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" isELIgnored="false" %>
+ <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Update customer list</title>
+<style>
+table,tr,td{
+backgroung-color:palevioletred;
+}
+body{
+ 
+background-repeat:no-repeat;
+background-position:fixed;
+background-size:cover;
+}
+a{
+text-decoration:none;
+color:burlywood;
+}
+input{
+box-sizing: border-box;
+border-radius:8px;
+}
+</style>
+</head>
+<body bgcolor="snow">
+
+<h1>CUSTOMER MANAGEMENT SYSTEM</h1>
+
+<h3>ADD CUSTOMER</h3>
+<form:form action="saveCustomer" modelAttribute="customer" method="POST" >
+		<table>
+			<tbody>
+			<tr>
+					<td><label>Customer-ID:</label></td>
+					<td><form:input path="id" /></td>
+				</tr>
+				<tr>
+					<td><label>First Name:</label></td>
+					<td><form:input path="firstName" /></td>
+				</tr>
+				<tr>
+					<td><label>Last Name:</label></td>
+					<td><form:input path="lastName" /></td>
+				</tr>
+				<tr>
+					<td><label>Email_ID:</label></td>
+					<td><form:input path="email" /></td>
+				</tr>
+				<tr>
+					<td><label>Contact number:</label></td>
+					<td><form:input path="contact" /></td>
+				</tr>
+				<tr>
+					<td><label>Gender:</label></td>
+					<td><form:input path="gender" /></td>
+				</tr>
+				<tr>
+					<td><label>Product:</label></td>
+					<td><form:input path="product" /></td>
+				</tr>
+		
+				<tr>
+					<td><input type="submit" value="Save" class="save"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form:form>
+	<p>
+		<a href="http://localhost:8123/CustomerManagementSystem/customer/list">Back to Customer
+			List</a>
+	</p>
+</body>
+</html>
+
+
+
+
+login-failed.jsp
+-------------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login failed</title>
+</head>
+<body bgcolor="orange">
+<h2>Login failed!!</h2>
+<br>
+<p><a href="http://localhost:8123/CustomerManagementSystem/manager-login.jsp">Back to login page</a></p>
+</body>
+</html>
+
+
+
+
+
+spring-customer.xml
+---------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+
+-<beans xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans">
+
+<context:component-scan base-package="com.cts"/>
+
+<mvc:annotation-driven/>
+
+
+-<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+<property value="/WEB-INF/view/" name="prefix"/>
+
+<property value=".jsp" name="suffix"/>
+
+</bean>
+
+
+-<bean class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" id="myDataSource">
+
+<property value="com.mysql.jdbc.Driver" name="driverClass"/>
+
+<property value="jdbc:mysql://localhost:3306/customer_db?useSSL=false&serverTimezone=UTC" name="jdbcUrl"/>
+
+<property value="root" name="user"/>
+
+<property value="root" name="password"/>
+
+<property value="5" name="initialPoolSize"/>
+
+<property value="5" name="minPoolSize"/>
+
+<property value="20" name="maxPoolSize"/>
+
+<property value="30000" name="maxIdleTime"/>
+
+</bean>
+
+
+-<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" id="sessionFactory">
+
+<property name="dataSource" ref="myDataSource"/>
+
+<property value="com.cts.customer" name="packagesToScan"/>
+
+
+-<property name="hibernateProperties">
+
+
+-<props>
+
+<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+
+<prop key="hibernate.show_sql">true</prop>
+
+</props>
+
+</property>
+
+</bean>
+
+
+-<bean class="org.springframework.context.support.ResourceBundleMessageSource" id="messageSource">
+
+<property value="messages" name="basenames"/>
+
+</bean>
+
+
+-<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" id="myTransactionManager">
+
+<property name="sessionFactory" ref="sessionFactory"/>
+
+</bean>
+
+<tx:annotation-driven transaction-manager="myTransactionManager"/>
+
+<mvc:resources mapping="/resources/**" location="/resources/"/>
+
+</beans>
+
+
+web.xml
+--------------
+<?xml version="1.0"?>
+
+<!DOCTYPE web-app SYSTEM "http://java.sun.com/dtd/web-app_2_3.dtd" PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN">
+
+-<web-app>
+
+<display-name>Customer_Management</display-name>
+
+
+-<servlet>
+
+<servlet-name>dispatcher</servlet-name>
+
+<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+
+-<init-param>
+
+<param-name>ContextConfigLocation</param-name>
+
+<param-value>/WEB-INF/spring-customer.xml</param-value>
+
+</init-param>
+
+</servlet>
+
+
+-<servlet-mapping>
+
+<servlet-name>dispatcher</servlet-name>
+
+<url-pattern>/</url-pattern>
+
+</servlet-mapping>
+
+</web-app>
+
+
+
+
+message.properties
+------------------------
+typeMismatch.customer.doj=Invalid date
+
+
+CustomerController.java
+--------------------------------
+package com.cts.customer.controller;
+
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+import com.cts.customer.entity.Customer;
+import com.cts.customer.service.CustomerService;
+
+@Controller
+@RequestMapping("/customer")
+public class CustomerController {
+	
+	@Autowired
+	CustomerService customerService;
+    
+	@GetMapping("/list")
+    public String listCustomers(Model theModel)
+    {
+		List<Customer> customers= customerService.getAllCustomers();
+		theModel.addAttribute("customers",customers);
+		customers.forEach(s -> System.out.println(s));
+    	return "customer-list";
+    }
+	
+    @GetMapping("/addCustomer")
+	public String addEmployee(Model model) {
+    	Customer c1=new Customer();
+		model.addAttribute("customer",c1);
+		return "customer-add-form";
+	}
+    
+    @PostMapping("/saveCustomer")
+	public String saveCustomer(@Valid @ModelAttribute("customer") Customer cus,BindingResult bind)
+	{
+    	if(bind.hasErrors())
+    	{
+    		System.out.println(bind);
+    		return "customer-add-form";
+    	}
+    	else
+    	{
+    		customerService.saveCustomer(cus);
+		   return "redirect:/customer/list";
+    	}
+	}
+    
+    @GetMapping("/updateCustomer")
+    public String updateCustomer(@RequestParam("customerId") int id,Model model)
+	{
+    	Customer cus=customerService.getCustomer(id);
+		model.addAttribute("customer", cus);
+		return "customer-update-form";
+	}
+    
+    @GetMapping("/deleteCustomer")
+	public String delete(@RequestParam("customerId") int id)
+	{
+    	customerService.deleteCustomer(id);
+		return "redirect:/customer/list";
+	}
+    
+    @GetMapping("/searchCustomer")
+  	public String searchCustomer(@RequestParam("customerId") int id, Model model)
+  	{
+    	Customer cus=customerService.searchCustomer(id);
+      	model.addAttribute("customer", cus);
+  		return "customer-search-form";
+  	}
+    @GetMapping("/regCustomer")
+   	public String regEmployee(Model model) {
+       	Customer c1=new Customer();
+   		model.addAttribute("customer",c1);
+   		return "customer-register";
+   	}
+    @PostMapping("/saCustomer")
+	public String saCustomer(@Valid @ModelAttribute("customer") Customer cus,BindingResult bind)
+	{
+    	if(bind.hasErrors())
+    	{
+    		System.out.println(bind);
+    		return "customer-register";
+    	}
+    	else
+    	{
+    		customerService.saveCustomer(cus);
+		   return "redirect:/customer-login.jsp";
+    	}
+	}
+}
+
+
+HomeController.java
+-----------------------------
+package com.cts.customer.controller;
+
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.cts.customer.entity.Admin;
+
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+@Controller
+public class HomeController {
+  @RequestMapping("/")
+  public String displayWelcomePage(){
+  	return "welcome" ;
+  }
+  @RequestMapping("/success")
+  public String login(@ModelAttribute("admin") Admin adm) {
+	if((adm.getUsername().equals("admin")) &&(adm.getPassword().equals("admin123")))
+      {
+    	  return "redirect:/customer/list";
+      }
+    else
+      {
+    	  return "login-failed";
+      }
+	  
+  }
+}
+
+
+CustomerDAO.java
+----------------------
+package com.cts.customer.dao;
+
+
+
+import java.util.List;
+
+import com.cts.customer.entity.Customer;
+
+public interface CustomerDAO {
+  public List<Customer> getAllCustomers();
+  public void saveCustomer(Customer cus);
+  public Customer getCustomer(int id);
+  public void deleteCustomer(int id);
+  public Customer searchCustomer(int id);
+}
+
+CustomerDaoimpl.java
+-----------------------------------
+package com.cts.customer.dao;
+
+
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.cts.customer.entity.Customer;
+
+@Repository
+public class CustomerDaoImpl implements CustomerDAO {
+
+	@Autowired
+	SessionFactory factory;
+
+	@Override
+	public List<Customer> getAllCustomers() {
+	    Session session =factory.getCurrentSession();
+	    Query<Customer> query =session.createQuery("from Customer",Customer.class);
+	    List<Customer> cusList=query.getResultList();
+	    return cusList;
+	}
+
+	@Override
+	public void saveCustomer(Customer cus) {
+		Session session =factory.getCurrentSession();
+		session.saveOrUpdate(cus);
+		System.out.println(cus);
+	}
+
+	@Override
+	public Customer getCustomer(int id) {
+		Session session =factory.getCurrentSession();
+		Customer customer=session.get(Customer.class, id);
+		return customer;
+	}
+
+	@Override
+	public void deleteCustomer(int id) {
+		Session session =factory.getCurrentSession();
+		Customer cu=session.get(Customer.class, id);
+		session.delete(cu);
+		System.out.println("Deleted!");
+	}
+	@Override
+	public Customer searchCustomer(int id) {
+		Session session =factory.getCurrentSession();
+		Customer customer=session.get(Customer.class, id);
+		return customer;
+	}
+
+}
+
+
+
+Admin.java
+--------------
+package com.cts.customer.entity;
+
+
+import javax.persistence.Embeddable;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+@Embeddable
+public class Admin {
+	@NotEmpty(message="username should not be empty")
+ private String username;
+	@NotEmpty(message="password should not be empty")
+ private String password;
+public String getUsername() {
+	return username;
+}
+public void setUsername(String username) {
+	this.username = username;
+}
+public String getPassword() {
+	return password;
+}
+public void setPassword(String password) {
+	this.password = password;
+}
+}
+
+
+Customer.java
+-------------------------------
+package com.cts.customer.entity;
+
+
+import java.sql.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+
+@Entity
+@Table(name="customer_management")
+public class Customer {
+	@Id
+	@Column(name="customer_id")
+	@NotNull(message="id cannot be null")
+    private int id;
+	
+	@Column(name="firstName")
+	@NotEmpty(message="firstName cannot be null")
+    private String firstName;
+	
+	@Column(name="lastName")
+	@NotEmpty(message="lastName cannot be null")
+    private String lastName;
+	
+	@Column(name="mail_id")
+	@Email(message="email should be valid")
+    private String email;
+	
+	@Column(name="contact_number")
+	@NotEmpty(message="contact number cannot be null")
+	@Pattern(regexp="(^$|[0-9]{10})",message="Enter 10 digit mobile number")
+	private String contact;
+	
+	@Column(name="gender")
+	@NotEmpty(message="gender cannot be null")
+	private String gender;
+	
+	@Column(name="product")
+	@NotEmpty(message="product cannot be null")
+	private String product;
+	
+
+   
+	public Customer() {}
+	public Customer(int id,String firstName, String lastName, String email, String contact, String gender,String product) {
+		this.id=id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.contact = contact;
+		this.gender = gender;
+		this.product=product;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getContact() {
+		return contact;
+	}
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getProduct() {
+		return product;
+	}
+	public void setProduct(String product) {
+		this.product = product;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", contact=" + contact + ", gender=" + gender + ", product=" + product + "]";
+	}
+    
+}
+
+
+
+CustomerService.java
+----------------------------
+package com.cts.customer.service;
+
+import java.util.List;
+
+import com.cts.customer.entity.Customer;
+
+public interface CustomerService {
+
+	public List<Customer> getAllCustomers();
+	public void saveCustomer(Customer cus);
+	public Customer getCustomer(int id);
+	public void deleteCustomer(int id);
+	public Customer searchCustomer(int id);
+	
+}
+
+
+
+
+CustomerServiceImpl.java
+--------------------------------------
+package com.cts.customer.service;
+
+
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.cts.customer.dao.CustomerDAO;
+import com.cts.customer.entity.Customer;
+
+@Service
+public class CustomerServiceImpl implements CustomerService {
+
+	@Autowired
+	CustomerDAO customerDao;
+	
+	@Override
+	@Transactional
+	public List<Customer> getAllCustomers() {
+		
+		return customerDao.getAllCustomers();
+	}
+
+	@Override
+	@Transactional
+	public void saveCustomer(Customer emp) {
+		customerDao.saveCustomer(emp);
+		
+	}
+
+	@Override
+	@Transactional
+	public Customer getCustomer(int id) {
+		return customerDao.getCustomer(id);
+	}
+
+	@Override
+	@Transactional
+	public void deleteCustomer(int id) {
+		customerDao.deleteCustomer(id);
+	}
+	@Override
+	@Transactional
+	public Customer searchCustomer(int id) {
+		return customerDao.searchCustomer(id);
+	}
+	
+}
